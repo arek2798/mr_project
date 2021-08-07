@@ -39,7 +39,7 @@ const LessonsWrapper = styled.div`
 
 const TestsList = ({ tests }) => (
     <LessonsWrapper>
-        {tests && tests.map((test, index) => <Link key={index} to={`/testy/${test._id}`}><TestField content={test.title} percent={0} /></Link>)}
+        {tests && tests.map((test, index) => <Link key={index} to={`/testy/${test.slug}`}><TestField content={test.title} percent={0} /></Link>)}
     </LessonsWrapper>
 )
 

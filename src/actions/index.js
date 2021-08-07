@@ -159,12 +159,12 @@ export const getAllTests = () => (dispatch) => {
         })
 }
 
-export const getTest = (testID) => (dispatch) => {
+export const getTest = (slug) => (dispatch) => {
     dispatch({ type: 'TEST_REQUEST' });
     return axios
         .get('https://mrbackend.herokuapp.com/api/test', {
             params: {
-                testID
+                slug
             },
         })
         .then(({ data }) => {

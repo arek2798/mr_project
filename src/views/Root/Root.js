@@ -25,7 +25,7 @@ function RootView() {
             <Route exact path="/lekcje" component={LessonsView} />
             <Route exact path="/lekcje/:subject" component={LessonView} />
             <Route exact path="/testy" component={TestsView} />
-            <Route exact path="/testy/:testid" component={TestView} />
+            <Route exact path="/testy/:testSlug" component={TestView} />
             <Route exact path="/osiagniecia" component={AchievementsView} />
             <Route exact path="/profil" component={ProfilView} />
           </Switch>

@@ -86,6 +86,7 @@ const ScoreInfo = styled.div`
 const TestView = ({ userID, isLoading, getQuestions, getTest, currentTest, questions }) => {
     const [questNr, setQuestNr] = useState(1);
     const [dataLoadLevel, setDataLoadLevel] = useState(0);
+    const [testLoadLevel, setTestLoadLevel] = useState(0);
     const [allSelected, setAllSelected] = useState(false);
     const [render, setRender] = useState(0);
     const [questionsStats, setQuestionsStats] = useState(new Array(15));
@@ -93,7 +94,7 @@ const TestView = ({ userID, isLoading, getQuestions, getTest, currentTest, quest
     const [correctAnswer, setCorrectAnswer] = useState(0);
     const [questionsWithShuffleAnswers, setQuestionsWithShuffleAnswers] = useState([]);
 
-    const { testid } = useParams();
+    const { testSlug } = useParams();
 
     const shuffleAnswers = () => {
         const afterRand = new Array(questions.length);
@@ -108,11 +109,18 @@ const TestView = ({ userID, isLoading, getQuestions, getTest, currentTest, quest
 
     useEffect(() => {
         if (userID) {
-            getTest(testid);
-            getQuestions(testid);
+            getTest(testSlug);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        setTestLoadLevel(testLoadLevel + 1);
+        if (userID && currentTest && testLoadLevel) {
+            getQuestions(currentTest._id);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentTest])
 
     useEffect(() => {
         setDataLoadLevel(dataLoadLevel + 1);
