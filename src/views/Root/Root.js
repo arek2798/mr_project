@@ -23,7 +23,7 @@ function RootView() {
             <Route exact path="/rejestracja" component={RegisterView} />
             <Route exact path="/panel" component={DashboardView} />
             <Route exact path="/lekcje" component={LessonsView} />
-            <Route exact path="/lekcje/:subject" component={LessonView} />
+            <Route exact path="/lekcje/:lessonSlug" component={LessonView} />
             <Route exact path="/testy" component={TestsView} />
             <Route exact path="/testy/:testSlug" component={TestView} />
             <Route exact path="/osiagniecia" component={AchievementsView} />

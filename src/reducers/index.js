@@ -15,6 +15,8 @@ const initialState = {
     tests: [],
     currentTest: '',
     questions: [],
+    lessons: [],
+    currentLesson: '',
     notifications: []
 }
 
@@ -128,6 +130,22 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentTest: action.payload.data[0]
+            }
+        case ('ALL_LESSONS_REQUEST'):
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case ('ALL_LESSONS_SUCCESS'):
+            return {
+                ...state,
+                lessons: action.payload.data,
+                isLoading: false
+            }
+        case ('LESSON_SUCCESS'):
+            return {
+                ...state,
+                currentLesson: action.payload.data[0]
             }
         default:
             return state;

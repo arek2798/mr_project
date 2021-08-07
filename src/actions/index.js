@@ -202,3 +202,43 @@ export const getQuestions = (testID) => (dispatch) => {
             dispatch({ type: 'QUESTIONS_FAILURE' })
         })
 }
+
+export const getAllLessons = () => (dispatch) => {
+    dispatch({ type: 'ALL_LESSONS_REQUEST' });
+    return axios
+        .get('https://mrbackend.herokuapp.com/api/lessons')
+        .then(({ data }) => {
+            dispatch({
+                type: 'ALL_LESSONS_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'ALL_LESSONS_FAILURE' })
+        })
+}
+
+export const getLesson = (slug) => (dispatch) => {
+    dispatch({ type: 'LESSON_REQUEST' });
+    return axios
+        .get('https://mrbackend.herokuapp.com/api/lesson', {
+            params: {
+                slug
+            },
+        })
+        .then(({ data }) => {
+            dispatch({
+                type: 'LESSON_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'LESSON_FAILURE' })
+        })
+}

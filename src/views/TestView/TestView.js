@@ -54,6 +54,11 @@ const Answer = styled.div`
     align-items: center;
     font-size: 18px;
     margin: 7px 0 7px 10px;
+    cursor: pointer;
+
+    label {
+        cursor: pointer;
+    }
 `
 const ScoreWrapper = styled.div`
     height: 240px;
@@ -224,7 +229,7 @@ const mapStateToProps = ({ userID, isLoading, currentTest, questions }) => ({ us
 
 const mapDispatchToProps = (dispatch) => ({
     getQuestions: (testID) => dispatch(getQuestions(testID)),
-    getTest: (testID) => dispatch(getTest(testID))
+    getTest: (slug) => dispatch(getTest(slug))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(TestView);
