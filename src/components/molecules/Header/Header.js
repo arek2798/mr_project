@@ -4,27 +4,49 @@ import UserInfo from '../../components/UserInfo/Userinfo';
 import logo from './logo.svg';
 
 const Wrapper = styled.div`
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    max-width: 1500px;
     height: 105px;
-    display: flex;
     z-index: 100;
+    background: #F3F6F9;
+
+    @media (max-width: 520px) {
+        height: 80px;
+    }
+`
+const InsideWrapper = styled.div`
+    display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 30px;
+    width: 100%;
+    max-width: 1500px;
+    height: 100%;
     margin: auto;
-`
-const Logo = styled.img`
+    padding: 0 30px;
 
+    @media (max-width: 520px) {
+        padding: 0 30px 0 15px;
+    }
+`
+
+const Logo = styled.img`
+    @media (max-width: 1135px) {
+        width: 130px;
+    }
+
+    @media (max-width: 520px) {
+        width: 100px;
+    }
 `
 
 const Header = () => (
     <Wrapper>
-        <Logo src={logo} />
-        <UserInfo />
+        <InsideWrapper>
+            <Logo src={logo} />
+            <UserInfo />
+        </InsideWrapper>
     </Wrapper>
 )
 

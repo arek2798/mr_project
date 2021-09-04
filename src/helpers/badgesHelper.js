@@ -6,6 +6,7 @@ import roadIcon from './../assets/achivementsIcons/road.svg';
 import stars5Icon from './../assets/achivementsIcons/5stars.svg';
 import days14Icon from './../assets/achivementsIcons/14days.svg';
 import bikeIcon from './../assets/achivementsIcons/bike.svg';
+import { getLevelNumber } from './levelHelper';
 
 const badges = [
     {
@@ -43,4 +44,73 @@ const badges = [
 ]
 
 export const getBadges = () => badges;
+
+const parseDate = (date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+const datediff = (first, second) => {
+    return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}
+
+export const checkMyBadges = (userStats, tests, lessons) => {
+    const myBadges = [];
+    let currectLearnLevel, finishedTestNum
+    let loginDaysInRow, daysDiff, failed, currentDate;
+
+    finishedTestNum = 0;
+    userStats.testsStats.forEach(stats => stats.maksScore === 100 && finishedTestNum++);
+    currectLearnLevel = (userStats.lessonsStats.length + finishedTestNum) / (lessons.length + tests.length) * 100;
+    console.log(currectLearnLevel);
+
+    loginDaysInRow = 0;
+    daysDiff = 0;
+    failed = false;
+    currentDate = new Date();
+
+    let i = userStats.loginStats.length - 1
+    while (i >= 0 && !failed) {
+        const element = userStats.loginStats[i];
+        if (datediff(parseDate(new Date(element.loginDate)), parseDate(currentDate)) === daysDiff) {
+            loginDaysInRow++;
+            daysDiff++;
+        } else {
+            failed = true;
+        }
+        i--;
+    }
+
+    badges.forEach((badge, index) => {
+        switch (index) {
+            case 0:
+                if (loginDaysInRow >= 7) myBadges.push(index);
+                break;
+            case 1:
+                if (userStats.testsInRow >= 3) myBadges.push(index);
+                break;
+            case 2:
+                if (currectLearnLevel >= 30) myBadges.push(index);
+                break;
+            case 3:
+                if (currectLearnLevel >= 60) myBadges.push(index);
+                break;
+            case 4:
+                if (currectLearnLevel >= 90) myBadges.push(index);
+                break;
+            case 5:
+                if (getLevelNumber(userStats.points) >= 5) myBadges.push(index);
+                break;
+            case 6:
+                if (loginDaysInRow >= 14) myBadges.push(index);
+                break;
+            case 7:
+                if (finishedTestNum >= 6) myBadges.push(index);
+                break;
+            default:
+                break;
+        }
+    });
+
+    return myBadges;
+}
 

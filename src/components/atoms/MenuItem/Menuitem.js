@@ -11,6 +11,11 @@ const StyledNavLink = styled(NavLink)`
     cursor: pointer;
     transition: color ease-in-out 0.3s;
 
+    @media (max-width: 520px) {
+        grid-template-columns: 39px;
+        width: 39px;
+    }
+
     &:hover {
         svg {
             ${({ active }) => !active && 'stroke: #0068FF'};
@@ -48,11 +53,15 @@ const Icon = styled.div`
 const Content = styled.p`
     font-weight: 600;
     size: 1.8rem;
+
+    @media (max-width: 1135px) {
+        display: none;
+    }
 `
 
-const MenuItem = ({ link, active, content, children, exact = false }) => {
+const MenuItem = ({ link, active, content, children, mobile = false, exact = false }) => {
     return (
-        <StyledNavLink to={link} activeClassName="active" exact={exact}>
+        <StyledNavLink to={link} activeClassName={mobile ? "" : "active"} exact={exact} className={mobile && "mobile"}>
             <Icon>
                 {children}
             </Icon>

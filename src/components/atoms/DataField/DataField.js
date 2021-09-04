@@ -13,9 +13,13 @@ const DataField = styled.div`
     justify-content: space-around;
 
     h4 {
-        font-size: 24px;
+        font-size: 2.2rem;
         line-height: 33px;
         color: #0068FF;
+    }
+
+    @media(max-width: 520px) {
+        padding: 16px 18px;
     }
 `
 

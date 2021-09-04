@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { getPointsLimit } from '../../../helpers/levelHelper';
 import DataField from '../../atoms/DataField/DataField';
 import ProgressBar from '../../atoms/ProgressBar/ProgressBar';
 
@@ -11,11 +12,11 @@ const LevelInfo = styled.div`
 `
 const LevelTitle = styled.p`
     color: #0068FF;
-    font-size: 24px;
-    line-height: 33px;
+    font-size: 2.2rem;
+    line-height: 3.3rem;
 `
 const LevelPoints = styled.p`
-    font-size: 22px;
+    font-size: 2rem;
     line-height: 30px;
 
     span {
@@ -27,9 +28,9 @@ const LevelInfoField = ({ userStats: { points = 0, level } }) => (
     <DataField>
         <LevelInfo>
             <LevelTitle>{level}</LevelTitle>
-            <LevelPoints><span>{points}</span> / 165 pkt</LevelPoints>
+            <LevelPoints><span>{points}</span> / {getPointsLimit(points)} pkt</LevelPoints>
         </LevelInfo>
-        <ProgressBar percent={points / 165 * 100} />
+        <ProgressBar percent={points / getPointsLimit(points) * 100} />
     </DataField>
 )
 

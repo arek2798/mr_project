@@ -35,12 +35,23 @@ const LessonsWrapper = styled.div`
         border-radius: 10px;
         box-shadow: inset 7px 10px 12px #f0f0f0;
     }
+    
+    @media (max-width: 875px) {
+        justify-content: space-around;
+    }
+    
+    @media (max-width: 510px) {
+        padding: 0;
+        margin: 20px auto 0;
+    }
 `
 
-const TestsList = ({ tests }) => (
-    <LessonsWrapper>
-        {tests && tests.map((test, index) => <Link key={index} to={`/testy/${test.slug}`}><TestField content={test.title} percent={0} /></Link>)}
-    </LessonsWrapper>
-)
+const TestsList = ({ tests }) => {
+    return (
+        <LessonsWrapper>
+            {tests && tests.map((test, index) => <Link key={index} to={`/testy/${test.slug}`}><TestField icon={test.icon} content={test.title} id={test._id} /></Link>)}
+        </LessonsWrapper>
+    )
+}
 
 export default TestsList;

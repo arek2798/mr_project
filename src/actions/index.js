@@ -43,6 +43,44 @@ export const loginUser = (user) => (dispatch) => {
         })
 }
 
+export const updateUser = (newData) => (dispatch) => {
+    dispatch({ type: 'UPDATE_USER_REQUEST' });
+    return axios
+        .put(`https://mrbackend.herokuapp.com/api/user/${newData.user._id}`, {
+            ...newData
+        })
+        .then(({ data }) => {
+            dispatch({
+                type: 'UPDATE_USER_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'UPDATE_USER_FAILURE' })
+        })
+}
+
+export const deleteUser = (id) => (dispatch) => {
+    dispatch({ type: 'DELETE_USER_REQUEST' });
+    return axios
+        .delete(`https://mrbackend.herokuapp.com/api/user/${id}`)
+        .then(({ data }) => {
+            dispatch({
+                type: 'DELETE_USER_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'DELETE_USER_FAILURE' })
+        })
+}
+
 export const logoutUser = () => (dispatch) => {
     dispatch({
         type: 'LOGOUT_USER_SUCCESS',
@@ -50,7 +88,6 @@ export const logoutUser = () => (dispatch) => {
 }
 
 export const errorCodeReset = () => (dispatch) => {
-    console.log("reset");
     dispatch({
         type: 'ERRORCODE_RESET_SUCCESS',
     })
@@ -58,14 +95,19 @@ export const errorCodeReset = () => (dispatch) => {
 
 export const addUserStats = () => (dispatch, getState) => {
     dispatch({ type: 'ADD_USER_STATS_REQUEST' });
-    console.log("dodawanie");
     return axios
         .post('https://mrbackend.herokuapp.com/api/userstats', {
             userID: getState().createdUserId,
             points: 0,
-            dayQuestion: false,
+            lastDayQuestion: '2021-01-01T00:00:00.000+00:00',
             level: "żółtodziób",
-            avatarType: "boy1"
+            avatarType: "boy1",
+            badges: [],
+            lessonsStats: [],
+            testsStats: [],
+            loginStats: [],
+            testsInRow: 0,
+            dayQuestion: {}
         })
         .then(({ data }) => {
             dispatch({
@@ -105,7 +147,6 @@ export const getUserStats = () => (dispatch, getState) => {
 }
 export const updateUserStats = (userStats) => (dispatch) => {
     dispatch({ type: 'UPDATE_USER_STATS_REQUEST' });
-    console.log(userStats);
     return axios
         .put(`https://mrbackend.herokuapp.com/api/userstats/${userStats._id}`, {
             ...userStats
@@ -123,6 +164,25 @@ export const updateUserStats = (userStats) => (dispatch) => {
             dispatch({ type: 'UPDATE_USER_STATS_FAILURE' })
         })
 }
+export const deleteUserStats = (userStats) => (dispatch) => {
+    dispatch({ type: 'DELETE_USER_STATS_REQUEST' });
+    return axios
+        .delete(`https://mrbackend.herokuapp.com/api/userstats/${userStats._id}`, {
+            ...userStats
+        })
+        .then(({ data }) => {
+            dispatch({
+                type: 'DELETE_USER_STATS_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'DELETE_USER_STATS_FAILURE' })
+        })
+}
 
 export const removeNotifications = () => ({
     type: 'REMOVE_NOTIFICATIONS',
@@ -132,13 +192,10 @@ export const addNotification = (type, value) => ({
     type: 'ADD_NOTIFICATION',
     payload: { type, value }
 })
-export const addPoints = (points) => ({
-    type: 'ADD_POINTS',
-    payload: { points }
-})
-export const setDayquestAnswered = () => ({
-    type: 'SET_DAYQUEST_ANSWERED',
-    payload: {}
+
+export const setNewLevelCardVisible = (value) => ({
+    type: 'SET_NEWLEVEL_CARD',
+    payload: { value }
 })
 
 export const getAllTests = () => (dispatch) => {
@@ -181,10 +238,10 @@ export const getTest = (slug) => (dispatch) => {
         })
 }
 
-export const getQuestions = (testID) => (dispatch) => {
+export const getQuestions = (testID) => async (dispatch) => {
     dispatch({ type: 'QUESTIONS_REQUEST' });
     return axios
-        .get('https://mrbackend.herokuapp.com/api/question', {
+        .get('https://mrbackend.herokuapp.com/api/questions', {
             params: {
                 testID
             },
@@ -200,6 +257,50 @@ export const getQuestions = (testID) => (dispatch) => {
         .catch(err => {
             console.log(err);
             dispatch({ type: 'QUESTIONS_FAILURE' })
+        })
+}
+
+export const getDayQuestions = (testID) => async (dispatch) => {
+    dispatch({ type: 'DAY_QUESTIONS_REQUEST' });
+    return axios
+        .get('https://mrbackend.herokuapp.com/api/questions', {
+            params: {
+                testID
+            },
+        })
+        .then(({ data }) => {
+            dispatch({
+                type: 'DAY_QUESTIONS_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'DAY_QUESTIONS_FAILURE' })
+        })
+}
+
+export const getQuestion = (id) => async (dispatch) => {
+    dispatch({ type: 'QUESTION_REQUEST' });
+    return axios
+        .get('https://mrbackend.herokuapp.com/api/question', {
+            params: {
+                id
+            },
+        })
+        .then(({ data }) => {
+            dispatch({
+                type: 'QUESTION_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'QUESTION_FAILURE' })
         })
 }
 

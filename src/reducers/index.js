@@ -1,33 +1,36 @@
 const initialState = {
-    // user: {
-    //     id: 'h12g4h21k341234',
-    //     name: 'Piotrek',
-    // },
-    // userStats: {
-    //     userId: 'h12g4h21k341234',
-    //     points: 34,
-    //     dayQuestion: false,
-    //     level: 'żółtodziób'
-    // },
     userID: '',
     isLoading: false,
+    newLevelCardVisible: false,
     userStats: '',
     tests: [],
     currentTest: '',
     questions: [],
     lessons: [],
     currentLesson: '',
-    notifications: []
+    notifications: [],
+    dayQuestion: ''
 }
 
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
+        case ('ADD_USER_REQUEST'):
+            return {
+                ...state,
+                isLoading: true
+            }
         case ('ADD_USER_SUCCESS'):
             localStorage.setItem('createdUserId', action.payload.data.id);
             return {
                 ...state,
                 errorCode: action.payload.data.errorCode,
-                createdUserId: action.payload.data.id
+                createdUserId: action.payload.data.id,
+                isLoading: false
+            }
+        case ('LOGIN_USER_REQUEST'):
+            return {
+                ...state,
+                isLoading: true
             }
         case ('LOGIN_USER_SUCCESS'):
             localStorage.setItem('userID', action.payload.data._id);
@@ -36,6 +39,24 @@ const rootReducer = (state = initialState, action) => {
                 userID: action.payload.data._id,
                 user: action.payload.data,
                 errorCode: action.payload.data.errorCode,
+                isLoading: false
+            }
+        case ('DELETE_USER_SUCCESS'):
+            localStorage.removeItem('userID');
+            return {
+                ...state,
+                userID: '',
+                isLoading: false,
+                newLevelCardVisible: false,
+                userStats: '',
+                tests: [],
+                currentTest: '',
+                questions: [],
+                lessons: [],
+                currentLesson: '',
+                notifications: [],
+                dayQuestion: '',
+                errorCode: 204
             }
         case ('LOGOUT_USER_SUCCESS'):
             localStorage.removeItem('userID');
@@ -43,10 +64,20 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 userID: '',
                 isLoading: false,
-                user: '',
-                errorCode: 0,
+                newLevelCardVisible: false,
                 userStats: '',
-                notifications: []
+                tests: [],
+                currentTest: '',
+                questions: [],
+                lessons: [],
+                currentLesson: '',
+                notifications: [],
+                dayQuestion: ''
+            }
+        case ('UPDATE_USER_SUCCESS'):
+            return {
+                ...state,
+                errorCode: action.payload.data.errorCode
             }
         case ('ERRORCODE_RESET_SUCCESS'):
             return {
@@ -65,44 +96,43 @@ const rootReducer = (state = initialState, action) => {
                 userStats: action.payload.data[0],
                 isLoading: false
             }
+        case ('DELETE_USER_STATS_REQUEST'):
+            return {
+                ...state
+            }
         case ('REMOVE_NOTIFICATIONS'):
             return {
                 ...state,
                 notifications: []
             }
+        case ('SET_NEWLEVEL_CARD'):
+            console.log(action.payload.value);
+            return {
+                ...state,
+                newLevelCardVisible: action.payload.value
+            }
         case ('ADD_NOTIFICATION'):
             let notiContent;
+            let notiValue = action.payload.value;
             switch (action.payload.type) {
-                case ('points'): notiContent = `Otrzymałeś ${action.payload.value} pkt`;
+                case ('points'):
+                    notiContent = `Otrzymałeś ${action.payload.value} pkt`;
+                    notiValue = '+' + action.payload.value;
                     break;
                 case ('level'): notiContent = `Osiągnąłeś kolejny level`;
+                    break;
+                case ('badge'): notiContent = `Otrzymałeś nową odznakę`;
                     break;
                 default: notiContent = "Powiadomienie";
             }
             const newNotifcation = {
                 type: action.payload.type,
-                value: '+' + action.payload.value,
+                value: notiValue,
                 content: notiContent
             }
             return {
                 ...state,
                 notifications: [...state.notifications, newNotifcation]
-            }
-        case ('ADD_POINTS'):
-            return {
-                ...state,
-                userStats: {
-                    ...state.userStats,
-                    points: state.userStats.points + action.payload.points
-                }
-            }
-        case ('SET_DAYQUEST_ANSWERED'):
-            return {
-                ...state,
-                userStats: {
-                    ...state.userStats,
-                    dayQuestion: true
-                }
             }
         case ('QUESTIONS_REQUEST'):
             return {
@@ -113,6 +143,28 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 questions: action.payload.data,
+                isLoading: false
+            }
+        case ('DAY_QUESTIONS_REQUEST'):
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case ('DAY_QUESTIONS_SUCCESS'):
+            return {
+                ...state,
+                dayQuestions: action.payload.data,
+                isLoading: false
+            }
+        case ('QUESTION_REQUEST'):
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case ('QUESTION_SUCCESS'):
+            return {
+                ...state,
+                dayQuestion: action.payload.data[0],
                 isLoading: false
             }
         case ('ALL_TESTS_REQUEST'):

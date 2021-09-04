@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import Button from '../../components/components/Button/Button';
 import logo from './logo.svg';
-import { addNewUser, addUserStats } from '../../actions';
+import { addNewUser, addUserStats, errorCodeReset } from '../../actions';
+import Loader from '../../components/atoms/Loader/Loader';
 
 const Wrapper = styled.div`
     width: 100vw;
@@ -15,7 +16,9 @@ const Wrapper = styled.div`
     background-color: #F3F6F9;
 `
 const FormWrapper = styled.div`
+    position: relative;
     width: 450px;
+    max-width: calc(100vw - 10px);
     height: 620px;
     background-color: #FFFFFF;
     border-radius: 30px;
@@ -59,8 +62,8 @@ const StyledForm = styled.form`
         }
 
         input:focus + label{
-                color: #0068FF;
-            }
+            color: #0068FF;
+        }
 
         &.button-wrapper {
             align-items: center;
@@ -80,15 +83,17 @@ const Info = styled.p`
     }
 `
 
-const SigninView = ({ userID, errorCode, addNewUser, addUserStats, history }) => {
+const SigninView = ({ userID, errorCode, addNewUser, addUserStats, history, isLoading, errorCodeReset }) => {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [error, setError] = useState({ is: false, content: '' });
+    const [submited, setSubmited] = useState(false);
 
     const submitHandle = (e) => {
         e.preventDefault();
+        setSubmited(true);
         if (email.length < 12) setError({ is: true, content: 'Podany adres email jest za krótki!' })
         else if (password.length < 8) setError({ is: true, content: 'Podane hasło jest za krótkie!' })
         else if (password !== passwordConfirm) setError({ is: true, content: 'Podane hasła nie są takie same!' })
@@ -113,12 +118,15 @@ const SigninView = ({ userID, errorCode, addNewUser, addUserStats, history }) =>
 
     useEffect(() => {
         if (errorCode === 201) userCreatedHandle()
-    })
+        else if (submited && errorCode === 409) setError({ is: true, content: 'Użytkownik już istnieje!' })
+        else if (submited && errorCode === 501) setError({ is: true, content: 'Nie można utworzyć konta!' })
+        else errorCodeReset();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [errorCode])
 
     if (userID) {
         return <Redirect to="/panel" />;
     }
-
 
     return (
         <Wrapper>
@@ -142,23 +150,23 @@ const SigninView = ({ userID, errorCode, addNewUser, addUserStats, history }) =>
                         <label htmlFor="passwordConfirm">Powtórz hasło:</label>
                     </div>
                     {error.is && <Error>{error.content}</Error>}
-                    {errorCode === 409 && <Error>Użytkownik już istnieje!</Error>}
-                    {errorCode === 501 && <Error>Nie można utworzyć konta!</Error>}
                     <div className="button-wrapper">
                         <Button type="submit" width="115px">Utwórz konto</Button>
                     </div>
                 </StyledForm>
                 <Info>Posiadasz już konto? <Link to="/">Zaloguj się</Link></Info>
+                {isLoading && <Loader />}
             </FormWrapper>
         </Wrapper>
     )
 }
 
-const mapStateToProps = ({ userID, userStats, errorCode }) => ({ userID, userStats, errorCode })
+const mapStateToProps = ({ userID, userStats, errorCode, isLoading }) => ({ userID, userStats, errorCode, isLoading })
 
 const mapDispatchToProps = (dispatch) => ({
     addNewUser: (newUser) => dispatch(addNewUser(newUser)),
     addUserStats: () => dispatch(addUserStats()),
+    errorCodeReset: () => dispatch(errorCodeReset())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SigninView)

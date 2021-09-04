@@ -7,8 +7,8 @@ import BadgesField from '../../components/components/BadgesField/BadgesField';
 import DayQuestion from '../../components/components/DayQuestion/DayQuestion';
 import NextLessonField from '../../components/components/NextLessonField/NextLessonField';
 import NextTestField from '../../components/components/NextTestField/NextTestField';
-import { getUserStats } from '../../actions';
 import { connect } from 'react-redux';
+import NewLevelCard from '../../components/molecules/NewLevelCard/NewLevelCard';
 
 const DataFieldsWrapper = styled.div`
     display: flex;
@@ -21,32 +21,52 @@ const DataFieldsWrapper = styled.div`
     max-height: 700px;
     overflow-y: hidden;
     position: relative;
-    top: 50%;
-    transform: translateY(-50%);
+
+    @media (max-width: 1040px) {
+        flex-wrap: nowrap;
+        max-height: unset;
+        overflow-y: scroll;
+        top: 0;
+        transform: translateY(0%);
+
+        & > div {
+            width: 100%;
+            min-height: unset;
+            margin-bottom: 25px;
+        }
+    }
+
+    @media (max-width: 520px) {
+        & > div {
+            width: 100%;
+            min-height: unset;
+            margin-bottom: 15px;
+        }
+    }
 `
 
 
-const DashboardView = () => {
+const DashboardView = ({ newLevelCardVisible }) => {
     return (
         <UserTemplate>
-            <DataFieldsWrapper>
-                <LevelInfoField />
-                <BadgesField />
-                <DayQuestion />
-                <DataField>
-                    <h4>Jak się uczyć?</h4>
-                    <p>Zobacz tajniki skutecznej nauki.</p>
-                </DataField>
-                <NextLessonField />
-                <NextTestField />
-            </DataFieldsWrapper>
+            {!newLevelCardVisible ?
+                <DataFieldsWrapper>
+                    <LevelInfoField />
+                    <BadgesField />
+                    <DayQuestion />
+                    <DataField>
+                        <h4>Jak się uczyć?</h4>
+                        <p>Zobacz tajniki skutecznej nauki.</p>
+                    </DataField>
+                    <NextLessonField />
+                    <NextTestField />
+                </DataFieldsWrapper>
+                :
+                <NewLevelCard />}
         </UserTemplate>
     )
 }
 
-const mapStateToProps = ({ userID, userStats }) => ({ userID, userStats })
-const mapDispatchToProps = (dispatch) => ({
-    getUserStats: (userID) => dispatch(getUserStats(userID))
-})
+const mapStateToProps = ({ newLevelCardVisible }) => ({ newLevelCardVisible })
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardView);
+export default connect(mapStateToProps)(DashboardView);

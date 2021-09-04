@@ -10,20 +10,26 @@ const BadgesWrapper = styled.div`
     align-items: center;
     padding: 25px 0 10px;
 `
+const Info = styled.p`
+    padding: 25px 0 10px;
+`
 const BadgesField = ({ userStats }) => {
     let badgesCount = 0;
     return (
         <DataField>
-            <h4>Odznaki</h4>
-            <BadgesWrapper>
-                {(userStats.badges && badgesCount < 5) && getBadges().map((badge, index) => {
-                    if (userStats.badges.includes(index)) {
-                        badgesCount++
-                        return <img key={index} src={badge.icon} alt="" />
-                    }
-                    return null;
-                })}
-            </BadgesWrapper>
+            <h4>Nowe odznaki</h4>
+            {(userStats.badges.length) ?
+                <BadgesWrapper>
+                    {(userStats.badges && badgesCount < 5) && getBadges().map((badge, index) => {
+                        if (userStats.badges.includes(index)) {
+                            badgesCount++
+                            return <img key={index} src={badge.icon} alt="" />
+                        }
+                        return null;
+                    })}
+                </BadgesWrapper>
+                :
+                <Info>Nie masz jeszcze żadnych odznak</Info>}
         </DataField>
     )
 }

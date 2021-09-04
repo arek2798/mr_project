@@ -5,6 +5,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Button from '../../components/components/Button/Button';
 import logo from './logo.svg';
 import { loginUser, errorCodeReset } from '../../actions';
+import Loader from '../../components/atoms/Loader/Loader';
 
 const Wrapper = styled.div`
     width: 100vw;
@@ -15,7 +16,9 @@ const Wrapper = styled.div`
     background-color: #F3F6F9;
 `
 const FormWrapper = styled.div`
+    position: relative;
     width: 450px;
+    max-width: calc(100vw - 10px);
     height: 420px;
     background-color: #FFFFFF;
     border-radius: 30px;
@@ -85,14 +88,18 @@ const AccountInfo = styled.p`
     margin-bottom: 10px;
 `
 
-const SigninView = ({ userID, errorCode, loginUser, errorCodeReset }) => {
+const SigninView = ({ userID, errorCode, loginUser, errorCodeReset, isLoading }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState({ is: false, content: '' });
     const [created, setCreated] = useState(false);
+    const [deleted, setDeleted] = useState(false);
+    const [submited, setSubmited] = useState(false);
 
     const submitHandle = (e) => {
         e.preventDefault();
+        setError({ is: false, content: '' })
+        setSubmited(true)
         if (email.length < 8 || password.length < 8) setError({ is: true, content: 'Podany login lub hasło jest za krótkie!' })
         else {
             setError({ is: false, content: '' })
@@ -101,14 +108,25 @@ const SigninView = ({ userID, errorCode, loginUser, errorCodeReset }) => {
     }
 
     const userCreatedHandle = () => {
-        console.log("handle")
+        console.log("user created handle");
         setCreated(true)
         errorCodeReset()
     }
 
     useEffect(() => {
         if (errorCode === 201) userCreatedHandle()
-    })
+        else if (errorCode === 204) {
+            setDeleted(true)
+            errorCodeReset()
+        }
+        if (submited) {
+            console.log("render");
+            if (errorCode === 404) setError({ is: true, content: 'Użytkownik nie istnieje!' })
+            else if (errorCode === 405) setError({ is: true, content: 'Podano złe hasło!' })
+            errorCodeReset();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [errorCode, submited])
 
 
     if (userID) {
@@ -122,8 +140,9 @@ const SigninView = ({ userID, errorCode, loginUser, errorCodeReset }) => {
                 <StyledForm autoComplete="off">
 
                     {created && <AccountInfo>Konto zostało stworzone!</AccountInfo>}
+                    {deleted && <AccountInfo>Konto zostało usunięte!</AccountInfo>}
                     <div>
-                        <input type="text" id="email" onChange={(e) => setEmail(e.target.value)} value={email} required />
+                        <input type="email" id="email" onChange={(e) => setEmail(e.target.value)} value={email} required />
                         <label htmlFor="email">E-mail:</label>
                     </div>
                     <div>
@@ -131,19 +150,18 @@ const SigninView = ({ userID, errorCode, loginUser, errorCodeReset }) => {
                         <label htmlFor="password">Hasło:</label>
                     </div>
                     {error.is && <Error>{error.content}</Error>}
-                    {errorCode === 404 && <Error>Użytkownik nie istnieje!</Error>}
-                    {errorCode === 405 && <Error>Podano złe hasło!</Error>}
                     <div className="button-wrapper">
                         <Button type="submit">Zaloguj się</Button>
                     </div>
                 </StyledForm>
+                {isLoading && <Loader />}
                 <Info>Nie posiadasz konta? <Link to="/rejestracja">Zarejerstruj się</Link></Info>
             </FormWrapper>
         </Wrapper>
     )
 }
 
-const mapStateToProps = ({ userID, userStats, errorCode }) => ({ userID, userStats, errorCode })
+const mapStateToProps = ({ userID, userStats, errorCode, isLoading }) => ({ userID, userStats, errorCode, isLoading })
 
 const mapDispatchToProps = (dispatch) => ({
     loginUser: (user) => dispatch(loginUser(user)),

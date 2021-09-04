@@ -8,11 +8,11 @@ import { connect } from 'react-redux';
 import TestsList from '../../components/components/TestsList/TestsList';
 
 const Wrapper = styled.div`
-    height: 800px;
+    height: 100%;
     width: 100%;
 `
 
-const TestsView = ({ userID, tests, getAllTests }) => {
+const TestsView = ({ userID, tests, getAllTests, userStats }) => {
     useEffect(() => {
         if (userID) {
             getAllTests();
@@ -20,12 +20,18 @@ const TestsView = ({ userID, tests, getAllTests }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userID])
 
+    const countFinishedTests = () => {
+        let finishedTestNum = 0;
+        userStats.testsStats.forEach(stats => stats.maksScore === 100 && finishedTestNum++);
+        return finishedTestNum;
+    }
+
     return (
         <UserTemplate verticalCenter={true}>
             <Wrapper>
                 <ViewHeader>
                     <h3>Sprawdź ile już potrafisz</h3>
-                    <p>Ukończono: 0 / {tests.length} testy</p>
+                    <p>Ukończono: {userStats.testsStats && countFinishedTests()} / {tests.length} testy</p>
                 </ViewHeader>
                 <TestsList tests={tests} />
             </Wrapper>
@@ -33,7 +39,7 @@ const TestsView = ({ userID, tests, getAllTests }) => {
     )
 }
 
-const mapStateToProps = ({ userID, tests }) => ({ userID, tests })
+const mapStateToProps = ({ userID, tests, userStats }) => ({ userID, tests, userStats })
 
 const mapDispatchToProps = (dispatch) => ({
     getAllTests: () => dispatch(getAllTests())

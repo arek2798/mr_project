@@ -13,10 +13,15 @@ import { getAllLessons } from '../../actions';
 import LessonsList from '../../components/components/LessonsList/LessonsList';
 
 const Wrapper = styled.div`
-    height: 800px;
+    height: 100%;
+    width: 100%;
+
+    /* @media (max-width: 1135px) {
+        height: 700px;
+    } */
 `
 
-const LessonsView = ({ userID, lessons, getAllLessons }) => {
+const LessonsView = ({ userID, lessons, getAllLessons, userStats }) => {
     useEffect(() => {
         if (userID) {
             getAllLessons();
@@ -29,9 +34,9 @@ const LessonsView = ({ userID, lessons, getAllLessons }) => {
             <Wrapper>
                 <ViewHeader>
                     <h3>Wybierz czego chcesz się nauczyć</h3>
-                    <p>Ukończono: 0 / {lessons.length} lekcji</p>
+                    <p>Ukończono: {userStats.lessonsStats ? userStats.lessonsStats.length : 0} / {lessons.length} lekcji</p>
                 </ViewHeader>
-                <LessonsList lessons={lessons} />
+                <LessonsList />
 
                 {/* <Link to="/lekcje/wyposazenie-roweru"><LessonField color="#F1B512" icon={HelmetIcon} header="Wyposażenie roweru" desc="W tej lekcji nauczysz się jak poprawie wyposażyć rower." check={true} /></Link>
                 <LessonField color="#5AB5F7" icon={HorizontalSignsIcon} header="Znaki poziome" desc="W tej lekcji poznasz wszystkie znaki poziome występujące na drogach." />
@@ -51,7 +56,7 @@ const LessonsView = ({ userID, lessons, getAllLessons }) => {
     )
 }
 
-const mapStateToProps = ({ userID, lessons }) => ({ userID, lessons })
+const mapStateToProps = ({ userID, lessons, userStats }) => ({ userID, lessons, userStats })
 
 const mapDispatchToProps = (dispatch) => ({
     getAllLessons: () => dispatch(getAllLessons())

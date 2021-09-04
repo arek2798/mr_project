@@ -10,6 +10,7 @@ import girl2 from '../../../avatars/girl2.svg';
 import girl3 from '../../../avatars/girl3.svg';
 import notificationIcon from './NotificationIcon.svg';
 import newLevelIcon from './newLevel.svg';
+import newBadgeIcon from './newBadge.svg';
 import { logoutUser, removeNotifications } from '../../../actions';
 
 const Wrapper = styled.div`
@@ -74,6 +75,14 @@ const NewNotification = styled.div`
     top: 14px;
     right: 0;
 `
+const ModalBg = styled.div`
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+`
 const Modal = styled.div`
     min-width: 200px;
     background: #FFFFFF;
@@ -84,6 +93,7 @@ const Modal = styled.div`
     text-align: center;
     padding: 10px 15px;
     box-shadow: 2px 2px 18px rgba(0, 0, 0, 0.15);
+    z-index: 10;
 
     & > p {
         margin: 10px 0;
@@ -124,11 +134,35 @@ const Icon = styled.div`
     justify-content: space-around;
     align-items: center;
 `
-
 const RemoveBtn = styled.div`
     font-size: 14px;
     text-decoration: underline;
     cursor: pointer;
+`
+const NotiIcon = styled.img`
+    width: 30px;
+`
+const NotificationWrapper = styled.div`
+    max-height: 350px;
+    overflow-y: scroll;
+    padding-right: 10px;
+        
+    ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #008AFF;
+        border-radius: 7px;
+    }
+    ::-webkit-scrollbar-thumb:hover{
+        background: #0068FF;
+    }
+    ::-webkit-scrollbar-track{
+        background: #ffffff;
+        border-radius: 7px;
+        box-shadow: inset 7px 10px 12px #f0f0f0;
+    }
 `
 
 const UserInfo = ({ user, userStats, notifications, logoutUser, removeNotifications }) => {
@@ -137,40 +171,51 @@ const UserInfo = ({ user, userStats, notifications, logoutUser, removeNotificati
 
     const avatars = { "girl1": girl1, "girl2": girl2, "girl3": girl3, "boy1": boy1, "boy2": boy2, "boy3": boy3 }
 
+    const getIcon = (value) => {
+        switch (value) {
+            case 'level':
+                return <NotiIcon src={newLevelIcon} alt="" />
+            case 'badge':
+                return <NotiIcon src={newBadgeIcon} alt="" />
+            default:
+                return value
+        }
+    }
+
     return (
-        <Wrapper >
+        <Wrapper>
             <Notification>
                 <img src={notificationIcon} alt="" onClick={() => { setNotifOpen(!notifModalOpen); setProfilOpen(false) }} />
                 {(notifications.length !== 0) && <NewNotification />}
+                {notifModalOpen && <ModalBg onClick={() => { setProfilOpen(false); setNotifOpen(false) }} />}
                 {notifModalOpen && <Modal>
                     {notifications.length ? <>
-                        {notifications.map((item, index) => (
-                            <NotificationItem key={index}>
-                                <Icon>
-                                    {item.value === '' ?
-                                        <img src={newLevelIcon} alt="" />
-                                        :
-                                        item.value}
-                                </Icon>
-                                <p>{item.content}</p>
-                            </NotificationItem>
-                        ))}
+                        <NotificationWrapper>
+                            {notifications.map((item, index) => (
+                                <NotificationItem key={index}>
+                                    <Icon>
+                                        {getIcon(item.value)}
+                                    </Icon>
+                                    <p>{item.content}</p>
+                                </NotificationItem>
+                            ))}
+                        </NotificationWrapper>
                         <RemoveBtn onClick={removeNotifications}>Usuń wszystkie powiadomienia</RemoveBtn>
                     </>
                         :
                         'Brak powiadomień'}
                 </Modal>}
             </Notification>
-            <ProfilWrapper>
+            <ProfilWrapper className="desktop" >
                 <UserDetails onClick={() => { setProfilOpen(!profilModalOpen); setNotifOpen(false) }}>
                     <UserName>{user && user.name}</UserName>
                     <Avatar>
                         <img src={avatars[userStats.avatarType]} alt="" />
                     </Avatar>
                 </UserDetails>
+                {profilModalOpen && <ModalBg onClick={() => { setProfilOpen(false); setNotifOpen(false) }} />}
                 {profilModalOpen && <Modal className="modal">
                     <Link to="/profil">Profil</Link>
-                    <Link to="/profil">Ustawienia</Link>
                     <Line />
                     <button className="logoutBtn" onClick={logoutUser}>Wyloguj się</button>
                 </Modal>}

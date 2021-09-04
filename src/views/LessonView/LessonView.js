@@ -1,26 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import UserTemplate from '../../templates/UserTemplate';
+import Button from '../../components/components/Button/Button';
 import { connect } from 'react-redux';
-import { getLesson } from '../../actions';
+import { getLesson, updateUserStats, addNotification, setNewLevelCardVisible } from '../../actions';
+import { getLevelName } from '../../helpers/levelHelper';
+import NewLevelCard from '../../components/molecules/NewLevelCard/NewLevelCard';
 
 const Wrapper = styled.div`
-    height: 800px;
-    max-width: 1000px;
-`
-const LessonTitle = styled.h3`
-    font-size: 24px;
-    color: #0068FF;
-`
-const Content = styled.div`
-    margin: 28px 0;
-    padding: 0 15px;
+    height: calc(100vh - 200px);
+    width: 100%;
+    position: relative;
     overflow-y: scroll;
-    color: #252525;
-    
+
     ::-webkit-scrollbar {
-        width: 13px;
+        width: 10px;
         height: 13px;
     }
     ::-webkit-scrollbar-thumb {
@@ -36,33 +31,137 @@ const Content = styled.div`
         box-shadow: inset 7px 10px 12px #f0f0f0;
     }
 `
-// const ContentHeader = styled.p`
-//     font-size: 18px;
-//     color: #0068FF;
-//     margin: 20px 0 12px 5px;
-// `
+const LessonTitle = styled.h3`
+    font-size: 24px;
+    color: #0068FF;
+`
+const Content = styled.div`
+    margin: 28px 0;
+    padding: 0 15px;
+    color: #252525;
 
-const LessonView = ({ userID, isLoading, currentLesson, getLesson }) => {
+    h3 {
+        margin: 30px 0 20px;
+        color: #0068FF;
+    }
+`
+const ButtonWrapper = styled.div`
+    width: 100%;
+    text-align: center;
+`
+const ScoreWrapper = styled.div`
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+`
+const ScoreInfo = styled.div`
+    color: #252525;
+    text-align: center;
+
+    .message {
+        font-size: 36px;
+        color: ${({ correct }) => correct ? '#19BF55' : '#FF4A4A'}
+    }
+    .correct-answers {
+        font-size: 28px;
+        margin: 13px 0;
+    }
+    .points {
+        font-size: 24px;
+
+    }
+`
+
+const LessonView = ({ userID, isLoading, currentLesson, getLesson, userStats, updateUserStats, history, addNotification, setNewLevelCardVisible, newLevelCardVisible }) => {
+    const [submited, setSubmited] = useState(false);
+    const [canAdd, setCanAdd] = useState(false);
+    const [loadStep, setLoadStep] = useState(0);
+
     let { lessonSlug } = useParams();
+
+    const checkCanAdd = () => {
+        let canAdd = true;
+        userStats.lessonsStats.forEach(stats => {
+            if (stats.lessonId === currentLesson._id) canAdd = false;
+        })
+        return canAdd;
+    }
+
     useEffect(() => {
         if (userID) {
             getLesson(lessonSlug);
+            setLoadStep(1);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        if (userID && loadStep) {
+            setCanAdd(checkCanAdd());
+            setLoadStep(2);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentLesson])
+
+    const buttonHandle = () => {
+        let newStats = userStats;
+        if (canAdd) {
+            const lessonsStats = newStats.lessonsStats;
+            lessonsStats.push({ lessonId: currentLesson._id })
+            let newPoints = userStats.points + 15;
+            let levelName = userStats.level;
+            if (userStats.level !== getLevelName(newPoints)) {
+                levelName = getLevelName(newPoints)
+                setNewLevelCardVisible(true);
+                addNotification('level', 'level');
+            }
+            newStats = {
+                ...newStats,
+                level: levelName,
+                points: newPoints,
+                lessonsStats
+            }
+            addNotification('points', 15);
+            updateUserStats(newStats);
+            setSubmited(true);
+        } else {
+            history.push('/lekcje');
+        }
+    }
+
     return (
         <UserTemplate verticalCenter={true}>
-            <Wrapper>
-                {currentLesson ?
-                    <>
-                        <LessonTitle>Temat: {currentLesson.title}</LessonTitle>
-                        <Content>{currentLesson.content}</Content>
-                    </>
-                    :
-                    <p>Trwa ładowanie...</p>
-                }
+            {!newLevelCardVisible ?
+                <Wrapper>
+                    {currentLesson && loadStep === 2 ?
+                        !submited ?
+                            <>
+                                <LessonTitle>Temat: {currentLesson.title}</LessonTitle>
+                                <Content dangerouslySetInnerHTML={{ __html: currentLesson.content }}></Content>
+                                <Content dangerouslySetInnerHTML={{ __html: currentLesson.content }}></Content>
+                                <Content dangerouslySetInnerHTML={{ __html: currentLesson.content }}></Content>
+                                <ButtonWrapper>
+                                    <Button type="button" width="130px" height="40px" fontSize="16px" onClick={buttonHandle}>{canAdd ? 'Już rozumiem!' : 'Powrót'}</Button>
+                                </ButtonWrapper>
+                            </>
+                            :
+                            <ScoreWrapper>
+                                <ScoreInfo correct={true}>
+                                    <p className="message">Brawo!! Umiesz już wszystko z tej lekcji!</p>
+                                    <p className="points">Otrzymałeś 15 punktów</p>
+                                </ScoreInfo>
+                                <Link to="/lekcje"><Button type="button">Powrót</Button></Link>
+                            </ScoreWrapper>
+                        :
+                        <p>Trwa ładowanie...</p>
+                    }
 
-                {/* <Content>
+                    {/* <Content>
                     <p>Sygnały świetlne nadawane przez urządzenia umieszczone na drodze oznaczają:
 
                         1 - Sygnał zielony - zezwolenie na wjazd lub wejście. Nie wolno wjechać za sygnalizator jeżeli:<br />
@@ -82,15 +181,20 @@ const LessonView = ({ userID, isLoading, currentLesson, getLesson }) => {
 
                         Migający lub stały sygnał żółty umieszczony na przeszkodzie, albo migający sygnał żółty nadawany przez sygnalizator, ostrzegają o występującym niebezpieczeństwie lub utrudnieniu ruchu oraz nakazują zachowanie szczególnej ostrożności.</p>
                 </Content> */}
-            </Wrapper>
+                </Wrapper>
+                :
+                <NewLevelCard />}
         </UserTemplate>
     )
 }
 
-const mapStateToProps = ({ userID, isLoading, currentLesson }) => ({ userID, isLoading, currentLesson })
+const mapStateToProps = ({ userID, isLoading, currentLesson, userStats, newLevelCardVisible }) => ({ userID, isLoading, currentLesson, userStats, newLevelCardVisible })
 
 const mapDispatchToProps = (dispatch) => ({
-    getLesson: (slug) => dispatch(getLesson(slug))
+    setNewLevelCardVisible: (value) => dispatch(setNewLevelCardVisible(value)),
+    addNotification: (type, value) => dispatch(addNotification(type, value)),
+    getLesson: (slug) => dispatch(getLesson(slug)),
+    updateUserStats: (userStats) => dispatch(updateUserStats(userStats)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(LessonView);
