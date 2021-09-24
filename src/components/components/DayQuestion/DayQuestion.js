@@ -6,6 +6,7 @@ import Button from '../Button/Button';
 import { addNotification, updateUserStats, setNewLevelCardVisible } from '../../../actions';
 import { useEffect } from 'react';
 import { getLevelName } from '../../../helpers/levelHelper';
+import Loader from '../../atoms/Loader/Loader';
 
 const QuestionForm = styled.form`
     display: flex;
@@ -24,6 +25,7 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+    position: relative;
 `
 const ButtonWrapper = styled.div`
     text-align: right;
@@ -65,17 +67,27 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
         return answersShuffled;
     }
 
+    const compareDate = (date1, data2) => {
+        if (date1.getFullYear() === data2.getFullYear() && date1.getMonth() === data2.getMonth() && date1.getDate() === data2.getDate())
+            return true
+        else
+            return false
+    }
+
     useEffect(() => {
         if (userID) {
-            console.log("userID");
-            console.log(userStats);
+            // console.log(shuffleAnswers);
+            // console.log("userID");
+            // console.log(userStats);
             setLoadStep(loadStep + 1);
             if (loadStep) {
-                console.log("sprawdzanie");
+                // console.log("sprawdzanie");
                 const lastDate = new Date(userStats.lastDayQuestion)
-                console.log(lastDate);
-                if (!userStats.lastDayQuestion || new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate()).getTime() < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime()) {
+                const currentDate = new Date()
+                // console.log(lastDate);
+                if (!userStats.lastDayQuestion || new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate()).getTime() < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime()) {
                     setAlreadyAnswered(false);
+                    // console.log("setAlreadyAnswered");
                 }
             }
         }
@@ -83,13 +95,15 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
     }, [userID, userStats, dayQuestion.questionId])
 
     useEffect(() => {
-        if (userID) {
-            if (dayQuestion && !shuffleAnswers.length) {
+        if (userID && userStats.dayQuestion && userStats.dayQuestion.date) {
+            console.log(userStats.dayQuestion.date);
+            if (dayQuestion && compareDate(new Date(userStats.dayQuestion.date), new Date())) {
+                console.log('losowanie');
                 setShuffleAnswers(arrayShuffle(dayQuestion.answers));
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userStats, dayQuestion])
+    }, [userStats])
 
     const handleForm = (e) => {
         e.preventDefault();
@@ -124,9 +138,10 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
     return (
         <DataField>
             <h4>Pytanie dnia</h4>
-            {(!alreadyAnswered && !submit) && <QuestionForm autoComplete="off" onSubmit={e => handleForm(e)}>
+            {(shuffleAnswers.length && !alreadyAnswered && !submit) && <QuestionForm autoComplete="off" onSubmit={e => handleForm(e)}>
                 <legend>{dayQuestion && dayQuestion.question}</legend>
-
+                {/* {console.log('dayQuestion')}
+                {console.log(dayQuestion)} */}
                 {dayQuestion && shuffleAnswers && shuffleAnswers.map((answer, index) => (
                     <Answer key={index}>
                         <input type="radio" id={index} name="question" value={answer} checked={answer === checkedAnswer} onChange={() => setAnswer(answer)} />
@@ -137,6 +152,7 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
                 <ButtonWrapper><Button type="submit">sprawdź</Button></ButtonWrapper>
             </QuestionForm>}
             <Wrapper>
+                {(!shuffleAnswers.length && !alreadyAnswered) && <Loader small />}
                 {(!alreadyAnswered && submit) && (correct ? <Info color="#18A300">Brawo! Prawidłowa odpowiedź! <br /> Otrzymujesz 5 pktów</Info> : <Info color="#F7785A">Niestety, błędna odpowiedź :(</Info>)}
                 {(alreadyAnswered) && <Info color="#737373">Odpowiedzialeś/aś już na pytanie dnia &#x1F60A;</Info>}
             </Wrapper>

@@ -152,10 +152,13 @@ export const updateUserStats = (userStats) => (dispatch) => {
             ...userStats
         })
         .then(({ data }) => {
+            console.log('data');
+            console.log(data);
             dispatch({
                 type: 'UPDATE_USER_STATS_SUCCESS',
                 payload: {
-                    data
+                    data,
+                    userStats
                 },
             })
         })

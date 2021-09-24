@@ -105,6 +105,7 @@ const UserTemplate = ({ userID, children, verticalCenter, horizontalCenter, user
                         date: new Date()
                     }
                 }
+                console.log("update");
                 updateUserStats(newUserStats);
                 getQuestion(newDayQuestion._id);
             }
@@ -120,7 +121,8 @@ const UserTemplate = ({ userID, children, verticalCenter, horizontalCenter, user
                 getAllLessons();
                 setLoadedStep(1);
             }
-            if (loadedStep === 1 && !checkLoginRegister()) {
+            if ((loadedStep === 1 || loadedStep === 2) && !checkLoginRegister()) {
+                console.log('loginSstats');
                 let newLoginStats = []
                 if (userStats.loginStats.length) {
                     newLoginStats = [
@@ -157,6 +159,7 @@ const UserTemplate = ({ userID, children, verticalCenter, horizontalCenter, user
                     ]
                 }
                 updateUserStats(newUserStats);
+                setLoadedStep(2);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

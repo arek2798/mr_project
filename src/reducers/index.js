@@ -100,13 +100,19 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state
             }
+        case ('UPDATE_USER_STATS_SUCCESS'):
+            console.log("action.payload.data");
+            console.log(action.payload.userStats);
+            return {
+                ...state,
+                userStats: action.payload.userStats,
+            }
         case ('REMOVE_NOTIFICATIONS'):
             return {
                 ...state,
                 notifications: []
             }
         case ('SET_NEWLEVEL_CARD'):
-            console.log(action.payload.value);
             return {
                 ...state,
                 newLevelCardVisible: action.payload.value
