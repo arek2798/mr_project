@@ -29,6 +29,7 @@ const Wrapper = styled.div`
 
     @media (max-width: 520px) {
         padding: 0 15px;
+        height: 500px;
     }
 `
 const Avatar = styled.div`
@@ -134,6 +135,7 @@ const PasswordForm = styled.form`
     padding: 40px 20px;
     display: flex;
     flex-direction: column;
+    height: 100%;
 
     h3 {
         text-align: center;

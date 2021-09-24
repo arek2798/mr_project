@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import DataField from '../../atoms/DataField/DataField';
 import LessonField from '../LessonField/LessonField';
-// import HelpIcon from '../../../icons/lessons_icons/help.svg';
-// import TrafficLightIcon from '../../../icons/lessons_icons/traffic-light.svg';
 import { connect } from 'react-redux';
 import { getAllLessons } from '../../../actions';
 import { useState } from 'react';
@@ -24,11 +22,6 @@ const FieldHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    /* h4 {
-        font-size: 2.4rem;
-        line-height: 2rem;
-    } */
 
     a {
         display: flex;
@@ -91,8 +84,8 @@ const NextLessonField = ({ lessons }) => {
                 selectedLessons.map(lesson => <LessonField key={lesson._id} to={`/lekcje/${lesson.slug}`} color={lesson.color} icon={lesson.icon} header={lesson.title} desc={lesson.desc} type="info" />)
                 :
                 <>
-                    <LessonField to="/lekcje" color="#F1B512" type="info" />
-                    <LessonField to="/lekcje" color="#F1B512" type="info" />
+                    <LessonField to="/lekcje" color="#F1B512" type="info" loading />
+                    <LessonField to="/lekcje" color="#F1B512" type="info" loading />
                 </>
             }
         </Wrapper>
