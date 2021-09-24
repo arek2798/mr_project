@@ -48,7 +48,7 @@ const DataFieldsWrapper = styled.div`
 
 const DashboardView = ({ newLevelCardVisible }) => {
     return (
-        <UserTemplate>
+        <UserTemplate verticalCenter>
             {!newLevelCardVisible ?
                 <DataFieldsWrapper>
                     <LevelInfoField />

@@ -44,6 +44,16 @@ const Content = styled.div`
         margin: 30px 0 20px;
         color: #0068FF;
     }
+
+    img {
+        margin: auto;
+        width: 100%;
+        max-width: 480px;
+    }
+
+    .img-wrapper {
+        text-align: center;
+    }
 `
 const ButtonWrapper = styled.div`
     width: 100%;
@@ -142,8 +152,6 @@ const LessonView = ({ userID, isLoading, currentLesson, getLesson, userStats, up
                         !submited ?
                             <>
                                 <LessonTitle>Temat: {currentLesson.title}</LessonTitle>
-                                <Content dangerouslySetInnerHTML={{ __html: currentLesson.content }}></Content>
-                                <Content dangerouslySetInnerHTML={{ __html: currentLesson.content }}></Content>
                                 <Content dangerouslySetInnerHTML={{ __html: currentLesson.content }}></Content>
                                 <ButtonWrapper>
                                     <Button type="button" width="130px" height="40px" fontSize="16px" onClick={buttonHandle}>{canAdd ? 'Już rozumiem!' : 'Powrót'}</Button>
