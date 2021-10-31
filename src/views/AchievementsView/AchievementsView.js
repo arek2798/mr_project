@@ -108,7 +108,7 @@ const AchievementsView = ({ userStats, lessons, tests }) => {
                             <li>Uzyskane punkty: <span>{userStats.points}</span></li>
                             <li>Ukończone lekcje: <span>{userStats.lessonsStats.length}</span></li>
                             <li>Zaliczone testy: <span>{finishedTestsNum}</span></li>
-                            <li>Opanowałeś już <span>{(userStats.lessonsStats.length + finishedTestsNum) / (lessons.length + tests.length) * 100}%</span> materiału</li>
+                            <li>Opanowałeś już <span>{((userStats.lessonsStats.length + finishedTestsNum) / (lessons.length + tests.length) * 100).toFixed(2)}%</span> materiału</li>
                         </ul>
                     </StatsWrapper>
                     <BadgesWrapper>

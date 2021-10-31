@@ -140,8 +140,6 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
             <h4>Pytanie dnia</h4>
             {(shuffleAnswers.length && !alreadyAnswered && !submit) && <QuestionForm autoComplete="off" onSubmit={e => handleForm(e)}>
                 <legend>{dayQuestion && dayQuestion.question}</legend>
-                {/* {console.log('dayQuestion')}
-                {console.log(dayQuestion)} */}
                 {dayQuestion && shuffleAnswers && shuffleAnswers.map((answer, index) => (
                     <Answer key={index}>
                         <input type="radio" id={index} name="question" value={answer} checked={answer === checkedAnswer} onChange={() => setAnswer(answer)} />
