@@ -108,7 +108,6 @@ const SigninView = ({ userID, errorCode, loginUser, errorCodeReset, isLoading })
     }
 
     const userCreatedHandle = () => {
-        console.log("user created handle");
         setCreated(true)
         errorCodeReset()
     }
@@ -120,7 +119,6 @@ const SigninView = ({ userID, errorCode, loginUser, errorCodeReset, isLoading })
             errorCodeReset()
         }
         if (submited) {
-            console.log("render");
             if (errorCode === 404) setError({ is: true, content: 'Użytkownik nie istnieje!' })
             else if (errorCode === 405) setError({ is: true, content: 'Podano złe hasło!' })
             errorCodeReset();

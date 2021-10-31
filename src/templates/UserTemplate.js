@@ -105,7 +105,6 @@ const UserTemplate = ({ userID, children, verticalCenter, horizontalCenter, user
                         date: new Date()
                     }
                 }
-                console.log("update");
                 updateUserStats(newUserStats);
                 getQuestion(newDayQuestion._id);
             }
@@ -122,7 +121,6 @@ const UserTemplate = ({ userID, children, verticalCenter, horizontalCenter, user
                 setLoadedStep(1);
             }
             if ((loadedStep === 1 || loadedStep === 2) && !checkLoginRegister()) {
-                console.log('loginSstats');
                 let newLoginStats = []
                 if (userStats.loginStats.length) {
                     newLoginStats = [

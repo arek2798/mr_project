@@ -232,14 +232,12 @@ const ProfilView = ({ user, userStats, updateUserStats, deleteUser, updateUser, 
 
     const submitHandle = (e) => {
         e.preventDefault();
-        console.log("submit");
         setFormSubmited(true);
         if (password.length < 8) setError({ is: true, content: 'Aktualne hasło jest za krótkie!' })
         else if (newPassword.length < 8) setError({ is: true, content: 'Nowe hasło jest za krótkie!' })
         else if (newPassword !== newPasswordConfirm) setError({ is: true, content: 'Podane hasła nie są takie same!' })
         else if (newPassword === password) setError({ is: true, content: 'Nowe hasło musi być inne niż aktualne!' })
         else {
-            console.log("wysłało");
             setError({ is: false, content: '' })
             if (errorCode === 409) setError({ is: true, content: 'Aktualne hasło jest nieprawidłowe!' })
             updateUser({

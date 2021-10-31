@@ -76,18 +76,12 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
 
     useEffect(() => {
         if (userID) {
-            // console.log(shuffleAnswers);
-            // console.log("userID");
-            // console.log(userStats);
             setLoadStep(loadStep + 1);
             if (loadStep) {
-                // console.log("sprawdzanie");
                 const lastDate = new Date(userStats.lastDayQuestion)
                 const currentDate = new Date()
-                // console.log(lastDate);
                 if (!userStats.lastDayQuestion || new Date(lastDate.getFullYear(), lastDate.getMonth(), lastDate.getDate()).getTime() < new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime()) {
                     setAlreadyAnswered(false);
-                    // console.log("setAlreadyAnswered");
                 }
             }
         }
@@ -96,9 +90,7 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
 
     useEffect(() => {
         if (userID && userStats.dayQuestion && userStats.dayQuestion.date) {
-            console.log(userStats.dayQuestion.date);
             if (dayQuestion && compareDate(new Date(userStats.dayQuestion.date), new Date())) {
-                console.log('losowanie');
                 setShuffleAnswers(arrayShuffle(dayQuestion.answers));
             }
         }

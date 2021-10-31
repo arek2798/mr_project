@@ -61,7 +61,6 @@ export const checkMyBadges = (userStats, tests, lessons) => {
     finishedTestNum = 0;
     userStats.testsStats.forEach(stats => stats.maksScore === 100 && finishedTestNum++);
     currectLearnLevel = (userStats.lessonsStats.length + finishedTestNum) / (lessons.length + tests.length) * 100;
-    console.log(currectLearnLevel);
 
     loginDaysInRow = 0;
     daysDiff = 0;

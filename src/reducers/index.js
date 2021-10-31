@@ -101,8 +101,6 @@ const rootReducer = (state = initialState, action) => {
                 ...state
             }
         case ('UPDATE_USER_STATS_SUCCESS'):
-            console.log("action.payload.data");
-            console.log(action.payload.userStats);
             return {
                 ...state,
                 userStats: action.payload.userStats,
