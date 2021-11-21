@@ -142,9 +142,9 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
                 <ButtonWrapper><Button type="submit">sprawdź</Button></ButtonWrapper>
             </QuestionForm>}
             <Wrapper>
-                {(!shuffleAnswers.length && !alreadyAnswered) && <Loader small />}
-                {(!alreadyAnswered && submit) && (correct ? <Info color="#18A300">Brawo! Prawidłowa odpowiedź! <br /> Otrzymujesz 5 pktów</Info> : <Info color="#F7785A">Niestety, błędna odpowiedź :(</Info>)}
-                {(alreadyAnswered) && <Info color="#737373">Odpowiedzialeś/aś już na pytanie dnia &#x1F60A;</Info>}
+                {(!shuffleAnswers.length && !alreadyAnswered) ? <Loader small /> : null}
+                {(!alreadyAnswered && submit) ? (correct ? <Info color="#18A300">Brawo! Prawidłowa odpowiedź! <br /> Otrzymujesz 5 pktów</Info> : <Info color="#F7785A">Niestety, błędna odpowiedź :(</Info>) : null}
+                {(alreadyAnswered) ? <Info color="#737373">Odpowiedzialeś/aś już na pytanie dnia &#x1F60A;</Info> : null}
             </Wrapper>
         </DataField>
     )
