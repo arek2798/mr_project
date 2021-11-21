@@ -59,7 +59,7 @@ const Wrapper = styled.div`
     }
 `
 
-const TestField = ({ id, icon, content, userStats }) => {
+const TestField = ({ id, icon, content, userStats, withProgress = true }) => {
     const [percent, setPercent] = useState(0);
     const { width } = useWindowDimensions();
 
@@ -78,7 +78,7 @@ const TestField = ({ id, icon, content, userStats }) => {
         <Wrapper>
             <img src={icon} alt="" />
             <p>{content}</p>
-            <ProgressCircle percent={percent} small={width < 510} />
+            {withProgress ? <ProgressCircle percent={percent} small={width < 510} /> : ''}
         </Wrapper>
     )
 }

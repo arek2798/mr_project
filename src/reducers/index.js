@@ -6,6 +6,7 @@ const initialState = {
     tests: [],
     currentTest: '',
     questions: [],
+    allQuestions: [],
     lessons: [],
     currentLesson: '',
     notifications: [],
@@ -52,6 +53,7 @@ const rootReducer = (state = initialState, action) => {
                 tests: [],
                 currentTest: '',
                 questions: [],
+                allQuestions: [],
                 lessons: [],
                 currentLesson: '',
                 notifications: [],
@@ -69,6 +71,7 @@ const rootReducer = (state = initialState, action) => {
                 tests: [],
                 currentTest: '',
                 questions: [],
+                allQuestions: [],
                 lessons: [],
                 currentLesson: '',
                 notifications: [],
@@ -147,6 +150,17 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 questions: action.payload.data,
+                isLoading: false
+            }
+        case ('ALL_QUESTIONS_REQUEST'):
+            return {
+                ...state,
+                isLoading: true,
+            }
+        case ('ALL_QUESTIONS_SUCCESS'):
+            return {
+                ...state,
+                allQuestions: action.payload.data,
                 isLoading: false
             }
         case ('DAY_QUESTIONS_REQUEST'):

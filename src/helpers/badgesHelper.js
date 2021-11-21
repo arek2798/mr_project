@@ -15,7 +15,7 @@ const badges = [
     },
     {
         icon: targetIcon,
-        title: 'Zalicz 3 testy z rzędu'
+        title: 'Zalicz 3 egzaminy z rzędu'
     },
     {
         icon: signsIcon,
@@ -39,7 +39,7 @@ const badges = [
     },
     {
         icon: bikeIcon,
-        title: 'Zalicz 6 testów'
+        title: 'Ukończ 5 testów'
     },
 ]
 

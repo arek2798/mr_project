@@ -261,6 +261,24 @@ export const getQuestions = (testID) => async (dispatch) => {
         })
 }
 
+export const getAllQuestions = () => (dispatch) => {
+    dispatch({ type: 'ALL_QUESTIONS_REQUEST' });
+    return axios
+        .get('https://mrbackend.herokuapp.com/api/questions/all')
+        .then(({ data }) => {
+            dispatch({
+                type: 'ALL_QUESTIONS_SUCCESS',
+                payload: {
+                    data
+                },
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: 'ALL_QUESTIONS_FAILURE' })
+        })
+}
+
 export const getDayQuestions = (testID) => async (dispatch) => {
     dispatch({ type: 'DAY_QUESTIONS_REQUEST' });
     return axios

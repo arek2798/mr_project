@@ -81,10 +81,10 @@ const NewLevelCard = ({ userStats, newLevelCardVisible, setNewLevelCardVisible }
         <Wrapper>
             <Laurels>
                 <img src={NewLevelStars} alt="" />
-                <LevelNumber>{getLevelNumber(userStats.points, true)}</LevelNumber>
+                <LevelNumber>{getLevelNumber(userStats.points)}</LevelNumber>
             </Laurels>
             <NewLevelText>Brawo!!<br /> Osiągnąłeś kolejny poziom!</NewLevelText>
-            <NewLevelName>{getLevelName(userStats.points, true)}</NewLevelName>
+            <NewLevelName>{getLevelName(userStats.points)}</NewLevelName>
             <Button onClick={handleButton}>Dalej</Button>
         </Wrapper>
     )

@@ -31,7 +31,10 @@ export const getLevelName = (points, next = false) => {
     let levelName = ''
     levels.forEach((level, index) => {
         if (!levelName && points < level.maxPoints) {
-            levelName = next ? levels[index + 1].name : level.name;
+            if (index < levels.length - 1)
+                levelName = next ? levels[index + 1].name : level.name;
+            else
+                levelName = level.name;
         }
     });
     return levelName;

@@ -45,11 +45,18 @@ const LessonsWrapper = styled.div`
         margin: 20px auto 0;
     }
 `
+const Divider = styled.div`
+    width: 100%;
+    height: 3px;
+    background-color: #CECECE;
+`
 
 const TestsList = ({ tests }) => {
     return (
         <LessonsWrapper>
             {tests && tests.map((test, index) => <Link key={index} to={`/testy/${test.slug}`}><TestField icon={test.icon} content={test.title} id={test._id} /></Link>)}
+            <Divider />
+            <Link to={`/testy/probny-egzamin`}><TestField icon="https://res.cloudinary.com/mrproject/image/upload/v1635715372/test_i0kxe7.png" content="Próbny egzamin" withProgress={false} /></Link>
         </LessonsWrapper>
     )
 }
