@@ -130,7 +130,7 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
     return (
         <DataField>
             <h4>Pytanie dnia</h4>
-            {(shuffleAnswers.length && !alreadyAnswered && !submit) && <QuestionForm autoComplete="off" onSubmit={e => handleForm(e)}>
+            {(shuffleAnswers.length && !alreadyAnswered && !submit) ? <QuestionForm autoComplete="off" onSubmit={e => handleForm(e)}>
                 <legend>{dayQuestion ? dayQuestion.question : ''}</legend>
                 {(dayQuestion && shuffleAnswers) ? shuffleAnswers.map((answer, index) => (
                     <Answer key={index}>
@@ -140,7 +140,7 @@ const DayQuestion = ({ userID, userStats, addNotification, updateUserStats, setN
                 )) : ''}
                 {error && <Error>Uwaga! Musisz zaznaczyć odpowiedź</Error>}
                 <ButtonWrapper><Button type="submit">sprawdź</Button></ButtonWrapper>
-            </QuestionForm>}
+            </QuestionForm> : null}
             <Wrapper>
                 {(!shuffleAnswers.length && !alreadyAnswered) ? <Loader small /> : null}
                 {(!alreadyAnswered && submit) ? (correct ? <Info color="#18A300">Brawo! Prawidłowa odpowiedź! <br /> Otrzymujesz 5 pktów</Info> : <Info color="#F7785A">Niestety, błędna odpowiedź :(</Info>) : null}
