@@ -27,6 +27,7 @@ const Wrapper = styled.div`
 `
 const Icon = styled.img`
     width: 60px;
+    max-height: 60px;
 `
 const Header = styled.p`
     font-size: 1.8rem;

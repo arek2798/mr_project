@@ -57,6 +57,7 @@ const Badge = styled.div`
         margin: 20px 35px;
         opacity: ${({ disable }) => disable ? '0.3' : '1'};
         width: 45px;
+        max-height: 45px
     }  
            
     @media (max-width: 450px) {

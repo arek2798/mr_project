@@ -37,20 +37,6 @@ const LessonsView = ({ userID, lessons, getAllLessons, userStats }) => {
                     <p>Ukończono: {userStats.lessonsStats ? userStats.lessonsStats.length : 0} / {lessons.length} lekcji</p>
                 </ViewHeader>
                 <LessonsList />
-
-                {/* <Link to="/lekcje/wyposazenie-roweru"><LessonField color="#F1B512" icon={HelmetIcon} header="Wyposażenie roweru" desc="W tej lekcji nauczysz się jak poprawie wyposażyć rower." check={true} /></Link>
-                <LessonField color="#5AB5F7" icon={HorizontalSignsIcon} header="Znaki poziome" desc="W tej lekcji poznasz wszystkie znaki poziome występujące na drogach." />
-                <LessonField color="#F7785A" icon={FirstHelpIcon} header="Pierwsza pomoc" desc="W tej lekcji nauczysz się jak radzić sobie podczas wypadku i udzielić pierwszej pomocy." />
-                <LessonField color="#F1B512" icon={VerticalSignsIcon} header="Znaki pionowe" desc="W tej lekcji dowiesz się co oznaczają znaki pionowe w ruchu drogowym." />
-                <Link to="/lekcje/sygnalizacja-swietlna"><LessonField color="#5AB5F7" icon={TrafficLightsIcon} header="Sygnalizacja świetlna" desc="W tej lekcji dowiesz się co oznaczają określone sygnały świetlne." /></Link>
-                <LessonField color="#F7785A" icon={AccrossIcon} header="Skrzyżowania równorzędne" desc="W tej lekcji nauczysz się jak zachowywać się na skrzyżowaniach równorzędnych." check={true} />
-                <LessonField color="#5AB5F7" icon={TrafficLightsIcon} header="Sygnalizacja świetlna" desc="W tej lekcji dowiesz się co oznaczają określone sygnały świetlne." />
-                <LessonField color="#F7785A" icon={AccrossIcon} header="Skrzyżowania równorzędne" desc="W tej lekcji nauczysz się jak zachowywać się na skrzyżowaniach równorzędnych." check={true} />
-                <LessonField color="#5AB5F7" icon={TrafficLightsIcon} header="Sygnalizacja świetlna" desc="W tej lekcji dowiesz się co oznaczają określone sygnały świetlne." />
-                <LessonField color="#F7785A" icon={AccrossIcon} header="Skrzyżowania równorzędne" desc="W tej lekcji nauczysz się jak zachowywać się na skrzyżowaniach równorzędnych." check={true} />
-                <LessonField color="#5AB5F7" icon={TrafficLightsIcon} header="Sygnalizacja świetlna" desc="W tej lekcji dowiesz się co oznaczają określone sygnały świetlne." />
-                <LessonField color="#F7785A" icon={AccrossIcon} header="Skrzyżowania równorzędne" desc="W tej lekcji nauczysz się jak zachowywać się na skrzyżowaniach równorzędnych." check={true} /> */}
-                {/* </LessonsWrapper> */}
             </Wrapper>
         </UserTemplate >
     )

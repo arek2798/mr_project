@@ -9,6 +9,11 @@ const BadgesWrapper = styled.div`
     grid-template-columns: repeat(5, 20%);
     align-items: center;
     padding: 25px 0 10px;
+    
+    img {
+        width: 50px;
+        max-height: 50px;
+    }
 `
 const Info = styled.p`
     padding: 25px 0 10px;

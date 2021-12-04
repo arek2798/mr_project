@@ -23,6 +23,7 @@ const Wrapper = styled.div`
 
     img {
         width: 60px;
+        max-height: 60px;
     }
 
     @media (max-width: 960px) {
@@ -42,6 +43,7 @@ const Wrapper = styled.div`
         
         img {
             width: 50px;
+            max-height: 50px;
         }
     }
 
@@ -55,6 +57,7 @@ const Wrapper = styled.div`
         
         img {
             width: 45px;
+            max-height: 45px;
         }
     }
 `
