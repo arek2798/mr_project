@@ -350,7 +350,7 @@ const TestView = ({ userID, isLoading, getQuestions, getAllQuestions, getTest, c
         const index = getTestIndex();
         let newTestsInRow = userStats.testsInRow;
         if (mockExam.current || index === -1 || percent > userStats.testsStats[index].maksScore) {
-            if (mockExam.current && countCorrectAnswer > (questionsWithShuffleAnswers.current.length * 0.8)) {
+            if (mockExam.current && countCorrectAnswer >= (questionsWithShuffleAnswers.current.length * 0.8)) {
                 newTestsInRow += 1;
             } else {
                 newTestsInRow = 0;
@@ -464,8 +464,8 @@ const TestView = ({ userID, isLoading, getQuestions, getAllQuestions, getTest, c
                             :
                             !showCorrectAnswers ?
                                 <ScoreWrapper>
-                                    <ScoreInfo correct={!mockExam.current || correctAnswer > questionsWithShuffleAnswers.current.length * 0.8}>
-                                        {mockExam.current ? <p className="message">{correctAnswer > questionsWithShuffleAnswers.current.length * 0.8 ? 'Brawo!! Udało Ci się zaliczyć egzamin!' : 'Niestety, nie udało Ci się zaliczyć egzaminu'}</p> : <p className="message">Udało Ci sie ukończyć test!</p>}
+                                    <ScoreInfo correct={!mockExam.current || correctAnswer >= questionsWithShuffleAnswers.current.length * 0.8}>
+                                        {mockExam.current ? <p className="message">{correctAnswer >= questionsWithShuffleAnswers.current.length * 0.8 ? 'Brawo!! Udało Ci się zaliczyć egzamin!' : 'Niestety, nie udało Ci się zaliczyć egzaminu'}</p> : <p className="message">Udało Ci sie ukończyć test!</p>}
                                         <p className="correct-answers">Poprawne odpowiedzi: {correctAnswer} / {questionsWithShuffleAnswers.current.length}</p>
                                         <p className="points">Otrzymałeś {newPoints.current} punkty/ów</p>
                                     </ScoreInfo>
