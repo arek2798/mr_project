@@ -43,6 +43,7 @@ const TestsView = ({ userID, tests, getAllTests, userStats }) => {
                 </ViewHeader>
                 <TestsList tests={tests} />
                 <p>Pytania pochądzą ze strony: <a href="https://kartarowerowa.net.pl/" target="_blank" rel="noreferrer">https://kartarowerowa.net.pl/</a></p>
+                <div>Icons made by <a href="https://www.flaticon.com" title="FlatIcon">www.flaticon.com</a></div>
             </Wrapper>
         </UserTemplate>
     )

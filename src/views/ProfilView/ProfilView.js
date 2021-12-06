@@ -332,6 +332,7 @@ const ProfilView = ({ user, userStats, updateUserStats, deleteUser, updateUser, 
                             <AvatarsWrapper>
                                 {Object.keys(avatars).map((key, index) => <img key={key} src={avatars[key]} alt="" onClick={() => changeAvatar(key)} />)}
                             </AvatarsWrapper>
+                            <div>Icons made by <a href="https://www.flaticon.com" title="FlatIcon">www.flaticon.com</a></div>
                         </AvatarsModal>}
                     </>}
             </Wrapper>

@@ -37,6 +37,7 @@ const LessonsView = ({ userID, lessons, getAllLessons, userStats }) => {
                     <p>Ukończono: {userStats.lessonsStats ? userStats.lessonsStats.length : 0} / {lessons.length} lekcji</p>
                 </ViewHeader>
                 <LessonsList />
+                <div>Icons made by <a href="https://www.flaticon.com" title="FlatIcon">www.flaticon.com</a></div>
             </Wrapper>
         </UserTemplate >
     )

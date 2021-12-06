@@ -86,7 +86,7 @@ const QuestionImg = styled.div`
 const ButtonWrapper = styled.div`
     text-align: right;
     width: 100%;
-    margin-top: 20px;
+    margin: 20px 0;
 
     button {
         margin: 0 10px;
