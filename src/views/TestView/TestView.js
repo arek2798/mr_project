@@ -86,6 +86,7 @@ const QuestionImg = styled.div`
 const ButtonWrapper = styled.div`
     text-align: right;
     width: 100%;
+    margin-top: 20px;
 
     button {
         margin: 0 10px;
@@ -135,7 +136,66 @@ const ScoreInfo = styled.div`
     }
     .points {
         font-size: 24px;
+    }
+`
+const ResultButtonsWrapper = styled.div`
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
 
+    button {
+        margin: 0 10px;
+    }
+`
+const CorrectAnswers = styled.div`
+    height: calc(100vh - 320px);
+    max-height: 700px;
+    overflow-y: scroll;
+    margin-top: 30px;
+
+    ::-webkit-scrollbar {
+        width: 13px;
+        height: 13px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #008AFF;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover{
+        background: #0068FF;
+    }
+    ::-webkit-scrollbar-track{
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: inset 7px 10px 12px #f0f0f0;
+    }
+
+    &>div {
+        margin-bottom: 30px;
+    }
+
+    legend {
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+
+    input {
+        cursor: default;
+    }
+
+    label {
+        cursor: default;
+    }
+`
+const ResultLabel = styled.div`
+    color: ${({ correct }) => correct && '#19BF55'};
+    color: ${({ wrong }) => wrong && '#FF4A4A'};
+`
+const CorrectAnswerDiv = styled.div`
+    font-size: 1.8rem;
+
+    span {
+        color: #19BF55;
     }
 `
 
@@ -149,6 +209,7 @@ const TestView = ({ userID, isLoading, getQuestions, getAllQuestions, getTest, c
     const [submit, setSubmit] = useState(false);
     const [correctAnswer, setCorrectAnswer] = useState(0);
     const [remainingTime, setRemainingTime] = useState({ "mins": '40', "secs": '00' });
+    const [showCorrectAnswers, setShowCorrectAnswers] = useState(false);
 
     const timer = useRef(0);
     const seconds = useRef(2400);
@@ -298,6 +359,7 @@ const TestView = ({ userID, isLoading, getQuestions, getAllQuestions, getTest, c
             let points = 0;
             if (mockExam.current) {
                 points = countCorrectAnswer < (0.8 * questionsWithShuffleAnswers.current.length) ? countCorrectAnswer : (countCorrectAnswer + 10);
+                newPoints.current = points;
                 let levelName = userStats.level;
                 if (userStats.level !== getLevelName(userStats.points + points)) {
                     levelName = getLevelName(userStats.points + points)
@@ -400,14 +462,53 @@ const TestView = ({ userID, isLoading, getQuestions, getAllQuestions, getTest, c
                                 </QuestionForm>
                             </>
                             :
-                            <ScoreWrapper>
-                                <ScoreInfo correct={!mockExam.current || correctAnswer > questionsWithShuffleAnswers.current.length * 0.8}>
-                                    {mockExam.current ? <p className="message">{correctAnswer > questionsWithShuffleAnswers.current.length * 0.8 ? 'Brawo!! Udało Ci się zaliczyć egzamin!' : 'Niestety, nie udało Ci się zaliczyć egzaminu'}</p> : <p className="message">Udało Ci sie ukończyć test!</p>}
-                                    <p className="correct-answers">Poprawne odpowiedzi: {correctAnswer} / {questionsWithShuffleAnswers.current.length}</p>
-                                    <p className="points">Otrzymałeś {newPoints.current} punkty/ów</p>
-                                </ScoreInfo>
-                                <Link to="/testy"><Button type="button">Powrót</Button></Link>
-                            </ScoreWrapper>
+                            !showCorrectAnswers ?
+                                <ScoreWrapper>
+                                    <ScoreInfo correct={!mockExam.current || correctAnswer > questionsWithShuffleAnswers.current.length * 0.8}>
+                                        {mockExam.current ? <p className="message">{correctAnswer > questionsWithShuffleAnswers.current.length * 0.8 ? 'Brawo!! Udało Ci się zaliczyć egzamin!' : 'Niestety, nie udało Ci się zaliczyć egzaminu'}</p> : <p className="message">Udało Ci sie ukończyć test!</p>}
+                                        <p className="correct-answers">Poprawne odpowiedzi: {correctAnswer} / {questionsWithShuffleAnswers.current.length}</p>
+                                        <p className="points">Otrzymałeś {newPoints.current} punkty/ów</p>
+                                    </ScoreInfo>
+                                    <ResultButtonsWrapper>
+                                        <Button type="button" onClick={() => setShowCorrectAnswers(true)} height="50px" width="110px">Pokaż odpowiedzi</Button>
+                                        <Link to="/testy"><Button type="button" height="50px" width="110px" fontSize="16px">Powrót</Button></Link>
+                                    </ResultButtonsWrapper>
+                                </ScoreWrapper>
+                                :
+                                <>
+                                    <TestHeader>
+                                        <div>
+                                            <h3>{mockExam.current ? 'Próbny egzamin' : 'Test: ' + currentTest.title}</h3>
+                                            <p>Liczba pytań: {questionsWithShuffleAnswers.current.length}</p>
+                                        </div>
+                                    </TestHeader>
+                                    <CorrectAnswers>
+                                        {questionsWithShuffleAnswers.current.map((question, questionIndex) =>
+                                            <div key={questionIndex}>
+                                                {question.img ?
+                                                    <QuestionImg>
+                                                        <img src={question.img} alt="" />
+                                                    </QuestionImg> : null}
+
+                                                <legend>{question.question}</legend>
+
+                                                {question.answers.map((answer, index) => (
+                                                    <Answer key={index}>
+                                                        <input type="radio" disabled id={index} name={`question_${questionIndex}`} checked={answer === questionsStats[questionIndex].checkedAnswer} />
+                                                        <ResultLabel htmlFor={index} correct={(answer === questionsStats[questionIndex].checkedAnswer) && (answer === question.correctAnswer)} wrong={(answer === questionsStats[questionIndex].checkedAnswer) && (answer !== question.correctAnswer)}>{answer}</ResultLabel>
+                                                    </Answer>
+                                                ))}
+
+                                                {questionsStats[questionIndex].checkedAnswer !== question.correctAnswer ?
+                                                    <CorrectAnswerDiv><span>Poprawna odpowiedź:</span> {question.correctAnswer}</CorrectAnswerDiv>
+                                                    : null}
+                                            </div>
+                                        )}
+                                    </CorrectAnswers>
+                                    <ResultButtonsWrapper>
+                                        <Button type="button" onClick={() => setShowCorrectAnswers(false)} height="50px" width="210px" fontSize="18px">Ukryj odpowiedzi</Button>
+                                    </ResultButtonsWrapper>
+                                </>
                         }
                     </Wrapper>
                     :
